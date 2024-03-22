@@ -14,11 +14,13 @@ interface Task {
 
 type RootStackParamsList = {
   TaskDetails: { task: Task }; 
+
 };
 
 interface TaskListProps {
   tasks: Task[];
   navigation: StackNavigationProp<RootStackParamsList, 'TaskDetails'>; 
+
 }
 
 const TaskList: React.FC<TaskListProps> = ({ navigation, tasks }) => {

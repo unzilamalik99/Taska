@@ -56,7 +56,7 @@ const AppNavigator: React.FC<AppNavigatorProps> = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen">
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Home">
           {(props) => <Home {...props}  />}

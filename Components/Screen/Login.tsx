@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScrollView } from 'react-native-gesture-handler';
+import { auth } from '../Firebase/firebaseConfig';
+import 'firebase/auth';
 
 type RootStackParamsList = {
   SignUp: undefined;
@@ -17,8 +19,42 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [badEmail, setBadEmail] = useState(false);
   const [badPassword, setBadPassword] = useState(false);
-const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
+ 
+  const handleSignIn = () => {
+    auth().signInWithEmailAndPassword(email, password)
+      .then((userCredential: { user: any; }) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log('User signed in:', user);
+      })
+      .catch((error: any) => {
+        console.error('Error signing in:', error);
+      });
+  
+      validate();
+  
+      if (email === '' || password === '')
+      {
+        alert('Please enter both email and password.');
+        return;
+      }
+    
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Invalid email format. Please enter a valid email address.');
+        return;
+      }
+      const isValidLogin = true;
+    
+      if (isValidLogin) {
+        navigation.navigate('Home');
+        // setEmail('');
+        // setPassword('');
+      } else {
+        alert('Invalid login credentials. Please try again.');
+      }
+  };
   const validate = () => {
     if (email === '') {
       setBadEmail(true);
@@ -33,31 +69,6 @@ const [showPassword, setShowPassword] = useState(false);
     
     }
   };
-
-  const handleLoginPress = () => {
-    validate();
-  
-    if (email === '' || password === '') {
-      alert('Please enter both email and password.');
-      return;
-    }
-  
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert('Invalid email format. Please enter a valid email address.');
-      return;
-    }
-    const isValidLogin = true;
-  
-    if (isValidLogin) {
-      navigation.navigate('Home');
-      // setEmail('');
-      // setPassword('');
-    } else {
-      alert('Invalid login credentials. Please try again.');
-    }
-  };
-  ;
 
   return (
     <ScrollView>
@@ -105,7 +116,7 @@ const [showPassword, setShowPassword] = useState(false);
           
         )}
 
-        <TouchableOpacity style={styles.btn} onPress={handleLoginPress}>
+        <TouchableOpacity style={styles.btn} onPress={handleSignIn}>
           <Text style={styles.btnText}>Login</Text>
         </TouchableOpacity>
 
